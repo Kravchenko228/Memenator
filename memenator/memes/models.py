@@ -30,7 +30,13 @@ class Rating(models.Model):
     meme = models.ForeignKey(Meme, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     #Score 
-    SCORE_CHOICES = [i for i in range(1, 6)]
+    SCORE_CHOICES = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    ]
     score = models.PositiveSmallIntegerField(choices=SCORE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
 
