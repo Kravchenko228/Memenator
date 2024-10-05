@@ -51,8 +51,11 @@ class MemeViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def random(self, request):
         meme = Meme.objects.order_by('?').first()
+        if meme is None:
+            return Response({"detail": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = self.get_serializer(meme)
         return Response(serializer.data)
+
 
     @action(detail=False)
     def top(self, request):

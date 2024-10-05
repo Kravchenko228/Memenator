@@ -1,0 +1,92 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs
+*.log
+*.pot
+*.pid
+
+# Media
+media/
+
+# Static
+static/
+
+# Virtual environments
+.venv/
+env/
+.venv/bin/
+.venv/lib/
+
+# Django stuff:
+db.sqlite3
+db.sqlite3-journal
+
+# Django migrations
+*/migrations/*
+
+# VS Code workspace and settings
+.vscode/
+.vscode/settings.json
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Pytest cache
+.cache
+
+# Docker
+*.env
+docker-compose.override.yml
+docker-compose*.yml
+*.dockerfile
+
+# Other configs
+.env
+*.sqlite3
+
+# IDE files
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore logs and temp files
+logs/
+*.log
+tmp/
+
+# Node modules (if using frontend tools like npm or yarn)
+node_modules/
+
+# Pylint
+pylint.log
+
+# Ignore Git-specific files
+*.orig
