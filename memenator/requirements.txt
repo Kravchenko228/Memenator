@@ -16,9 +16,14 @@ requests==2.32.3
 six==1.16.0
 sqlparse==0.5.1
 urllib3==2.2.3
-#djangorestframework-authtoken==1.0.0
 factory_boy==3.2.0
 pytest-django==4.5.2
+setuptools>=65.0.0
+drf-spectacular>=0.27.2
+Pillow==10.0.0
+imgurpython==1.1.7
+
+
 
 
 

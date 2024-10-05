@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'memes',
-]
+    'drf_spectacular',
+    ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -130,7 +131,12 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+IMGUR_CLIENT_ID = '188fe8009c6287d'
+IMGUR_CLIENT_SECRET = 'e5b19ab9b57dcdf5d514905a569c1670da4ea7b8t'
+
+
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
@@ -138,5 +144,18 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Memenator API',
+    'DESCRIPTION': 'Meme generator API for creating, retrieving, and rating memes.',
+    'VERSION': '1.0.0',
+}
+
+MEDIA_URL = '/media/'  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+
+
+
+
 
 

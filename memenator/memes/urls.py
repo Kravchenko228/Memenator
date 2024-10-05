@@ -18,7 +18,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MemeTemplateViewSet, MemeViewSet
+from .views import MemeTemplateViewSet, MemeViewSet, surprise_me_meme
+
 
 router = DefaultRouter()
 router.register(r'templates', MemeTemplateViewSet)
@@ -26,4 +27,5 @@ router.register(r'memes', MemeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+        path('memes/surprise-me/', surprise_me_meme, name='surprise-me'),  
 ]

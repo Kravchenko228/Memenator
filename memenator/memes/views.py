@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from PIL import Image, ImageDraw, ImageFont
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -7,6 +8,13 @@ from .serializers import MemeTemplateSerializer, MemeSerializer, MemeCreateSeria
 from django.db.models import Avg
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+from django.conf import settings
+from rest_framework.decorators import api_view
+from rest_framework import status
+import random
+from imgurpython import ImgurClient
+import os
+from io import BytesIO
 
 
 class MemePagination(PageNumberPagination):
@@ -62,4 +70,69 @@ class MemeViewSet(viewsets.ModelViewSet):
         top_memes = Meme.objects.annotate(average_rating=Avg('rating__score')).order_by('-average_rating')[:10]
         serializer = self.get_serializer(top_memes, many=True)
         return Response(serializer.data)
+
+#Bonus
+FUNNY_PHRASES = [
+    "When life gives you lemons, make memes!",
+    "I'm not lazy, I'm on energy-saving mode.",
+    "404: Not found",
+    "I followed my heart, it led me to the fridge.",
+    "This is fine.",
+    "I can't even...",
+    "Me trying to understand 2020.",
+    "I'm not arguing, I'm just explaining why I'm right."
+]
+
+# Initialize Imgur Client
+client_id = settings.IMGUR_CLIENT_ID
+client_secret = settings.IMGUR_CLIENT_SECRET
+imgur_client = ImgurClient(client_id, client_secret)
+
+@api_view(['GET'])
+def surprise_me_meme(request):
+    """
+    Returns a meme with random text and uploads it to Imgur.
+    """
+    # Select a random meme template
+    meme_template = MemeTemplate.objects.order_by('?').first()
+    if meme_template is None:
+        return Response({"detail": "No meme template found"}, status=404)
+
+    # Select a random phrase
+    top_text = random.choice(FUNNY_PHRASES)
+    bottom_text = random.choice(FUNNY_PHRASES)
+
+    # Download the image from the URL
+    response = requests.get(meme_template.image_url)
+    if response.status_code != 200:
+        return Response({"detail": "Failed to download image from URL"}, status=400)
+
+    img = Image.open(BytesIO(response.content))
+
+    # Add text to the image
+    draw = ImageDraw.Draw(img)
+    
+    # Load font
+    font_path = os.path.join(settings.MEDIA_ROOT, 'moovieStar.ttf')  # Ensure the font exists
+    font = ImageFont.truetype(font_path, 40)
+
+    # Add top text
+    draw.text((50, 50), top_text, font=font, fill="white")
+
+    # Add bottom text
+    draw.text((50, img.size[1] - 100), bottom_text, font=font, fill="white")
+
+    # Save the modified image to a buffer
+    buffer = BytesIO()
+    img.save(buffer, format='JPEG')
+    buffer.seek(0)
+
+    # Upload the modified image to Imgur
+    with open('generated_meme.jpg', 'wb') as f:
+        f.write(buffer.read())
+    uploaded_image = imgur_client.upload_from_path('generated_meme.jpg', anon=True)
+
+    # Return the URL of the uploaded meme
+    meme_url = uploaded_image['link']
+    return Response({"meme_url": meme_url})
 
